@@ -1,4 +1,4 @@
-# bod-ky_script
+# bod-ky
 Script that installs and sets up conky for Bodhi Linux.
 
 Script designed for Bodhi Linux that installs conky and, if the user wants, picom. In particular, the script checks if conky is already installed, if not it will proceed with the installation. Then it asks if you want to install picom, which is necessary to correctly display the transparency of conky on Bodhi Linux. Both will be installed from their respective ubuntu repositories via apt command. The script also asks if you want to replace the default .conkyrc file with my customized one and if you want to set conky and picom (if installed) to start automatically. The changes will take effect after reboot. 
