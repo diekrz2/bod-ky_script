@@ -89,7 +89,7 @@ replace_conkyrc(){
 	local source_file=".conkyrc"
 	local target_file="$HOME/.conkyrc"
 
-	echo "Do you want to replace the default configuration file with the one included with the script? (Y/n)"
+	echo "Do you want to use the '.conkyrc' configuration file included with this script? (Y/n)"
 	
 	read -r replace
 
@@ -99,7 +99,7 @@ replace_conkyrc(){
 			echo "The file .conkyrc has been replaced"
 			sleep 2
 		else	
-			echo "Error: the conky configuration file to copy does not exist"		
+			echo "Error: conky configuration file not found"		
 			exit 1
 		fi
 	elif [[ "$replace" =~ ^[nN]$ ]]; then
