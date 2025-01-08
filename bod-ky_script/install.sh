@@ -2,7 +2,7 @@
 
 
 # Script that installs and sets up conky for Bodhi Linux.
-# Copyright (C) 2025 diekrz2
+# Copyright (C) 2025 diekrz2 diekrz2@protonmail.com 
 
 # "bod-ky_script" is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
