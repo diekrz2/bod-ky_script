@@ -69,6 +69,7 @@ install_picom(){
 		echo "'picom' is not installed. If you are using Bodhi Linux it's recommended to install it. Proceed? (Y/n)"
   		echo
 		read -r pic_install
+  		echo
 		if [[ "$pic_install" =~ ^[yY]$ ]]; then				
 
 		sudo apt install picom -y
@@ -103,6 +104,7 @@ replace_conkyrc(){
 	echo "Do you want to use the '.conkyrc' configuration file included with this script? (Y/n)"
 	echo
 	read -r replace
+ 	echo
 
 	if [[ "$replace" =~ ^[yY]$ ]]; then
 		if [ -f "$source_file" ]; then
@@ -135,6 +137,7 @@ enable_autostart(){
 	echo "Do you want to enable 'conky' and 'picom' (if you decided to install it) on startup? (Y/n)"
  	echo
 	read -r autostart
+ 	echo
 
 	if [[ "$autostart" =~ ^[yY]$ ]]; then
 		mkdir -p "$(dirname "$startup_file")"
@@ -193,6 +196,7 @@ sleep 3
 echo "Do you want to restart the PC now? (Y/n)"
 echo
 read -r answ
+echo
 
 if [[ "$answ" =~ ^[yY]$ ]]; then
 	reboot
