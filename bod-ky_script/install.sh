@@ -30,24 +30,29 @@ fi
 install_conky(){
 
 	echo "Checking if 'conky' is already installed..."
+ 	echo
 	sleep 2
 	
 	if ! command -v conky &>/dev/null; then
 		
 		echo "'conky' is not installed. Installing..."
+  		echo
 		sleep 2
 
 		sudo apt update
 		sudo apt install conky-all -y
+  		echo
 
 		if [ $? -eq 0 ]; then
 			echo "'conky' has been installed."
+   			echo
 		else
 			echo "Error during 'conky' installation"
 			exit 1
 		fi
 	else
 		echo "'conky' is already installed"
+  		echo
 	fi
 }
 
@@ -56,18 +61,22 @@ install_conky(){
 install_picom(){
 
 	echo "Checking if 'picom' is already installed..."
+ 	echo
 	sleep 2
 	
 	if ! command -v picom &>/dev/null; then
 		
 		echo "'picom' is not installed. If you are using Bodhi Linux it's recommended to install it. Proceed? (Y/n)"
+  		echo
 		read -r pic_install
 		if [[ "$pic_install" =~ ^[yY]$ ]]; then				
 
 		sudo apt install picom -y
+  		echo
 
 			if [ $? -eq 0 ]; then
 				echo "'picom' has been installed."
+    				echo
 			else
 				echo "Error during 'picom' installation"
 				exit 1
@@ -76,9 +85,11 @@ install_picom(){
 		elif [[ "$pic_install" =~ ^[nN]$ ]]; then
 
 			echo "Operation cancelled"
+   			echo
 		fi
 	else
 		echo "'picom' is already installed"
+  		echo
 	fi
 }
 
@@ -90,13 +101,14 @@ replace_conkyrc(){
 	local target_file="$HOME/.conkyrc"
 
 	echo "Do you want to use the '.conkyrc' configuration file included with this script? (Y/n)"
-	
+	echo
 	read -r replace
 
 	if [[ "$replace" =~ ^[yY]$ ]]; then
 		if [ -f "$source_file" ]; then
 			cp "$source_file" "$target_file"
 			echo "The file .conkyrc has been replaced"
+   			echo
 			sleep 2
 		else	
 			echo "Error: conky configuration file not found"		
@@ -104,8 +116,10 @@ replace_conkyrc(){
 		fi
 	elif [[ "$replace" =~ ^[nN]$ ]]; then
 		echo "Operation cancelled"
+  		echo
 	else
 		echo "Invalid input. Please respond with 'y' or 'n'."
+  		echo
 
 	fi
 
@@ -119,6 +133,7 @@ enable_autostart(){
 	local startup_file="$HOME/.e/e/applications/startup/startupcommands"
 
 	echo "Do you want to enable 'conky' and 'picom' (if you decided to install it) on startup? (Y/n)"
+ 	echo
 	read -r autostart
 
 	if [[ "$autostart" =~ ^[yY]$ ]]; then
@@ -128,24 +143,30 @@ enable_autostart(){
 	   if ! grep -qx "conky" "$startup_file"; then
 		echo "conky" >> "$startup_file"
 		echo "'conky' has been configured to start automatically"
+  		echo
 
 	   else
 		echo "'conky' is already configured to start automatically"
+  		echo
 	   fi
 
 	   if ! grep -qx "picom" "$startup_file"; then
 		echo "picom" >> "$startup_file"
 		echo "'picom' has been configured to start automatically"
+  		echo
 
 	   else
 		echo "'picom' is already configured to start automatically"
+  		echo
 	   fi
   
 
 	elif [[ "$autostart" =~ ^[nN]$ ]]; then
 		echo "Operation cancelled"
+  		echo
 	else
 		echo "Invalid input. Please respond with 'y' or 'n'."
+  		echo
 		
 	fi
 }
@@ -167,8 +188,10 @@ main
 #code section that suggests restarting the PC at the end of the script. If you choose to not restart, you will need to start conky and picom manually.
 
 echo "Operations completed successfully"
+echo
 sleep 3
 echo "Do you want to restart the PC now? (Y/n)"
+echo
 read -r answ
 
 if [[ "$answ" =~ ^[yY]$ ]]; then
@@ -177,6 +200,7 @@ elif [[ "$answ" =~ ^[nN]$ ]]; then
 	echo "Operation cancelled"
 else
 	echo "Invalid input. Please respond with 'y' or 'n'."
+ 	echo
 fi
 
 
