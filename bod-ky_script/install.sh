@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 
 
-#function that checks if bash is being used
+# function that checks if bash is being used
 
 check_bash(){
 
@@ -25,7 +25,7 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 }
 
-#function that checks if 'conky' is installed, if not installs it. Accepts "y", "Y", "n" and "N" as answers
+# function that checks if 'conky' is installed, if not installs it. Accepts "y", "Y", "n" and "N" as answers
 
 install_conky(){
 
@@ -56,7 +56,7 @@ install_conky(){
 	fi
 }
 
-#function that checks if 'picom' is installed, if not it suggests to install it. Accepts "y", "Y", "n" and "N" as answers
+# function that checks if 'picom' is installed, if not it suggests to install it. Accepts "y", "Y", "n" and "N" as answers
 
 install_picom(){
 
@@ -87,14 +87,21 @@ install_picom(){
 
 			echo "Operation cancelled"
    			echo
-		fi
+
+  		else
+			echo "Invalid input. Please respond with 'y' or 'n'."
+ 			echo
+		
+  		fi
+
+  
 	else
 		echo "'picom' is already installed"
   		echo
 	fi
 }
 
-#function that asks whether to replace the default .conkyrc file with the one included with the script. Accepts "y", "Y", "n" and "N" as answers
+# function that asks whether to replace the default .conkyrc file with the one included with the script. Accepts "y", "Y", "n" and "N" as answers
 
 replace_conkyrc(){
 
@@ -128,7 +135,7 @@ replace_conkyrc(){
 }
 
 
-#function that asks whether to launch 'conky and 'picom' at PC startup. Intended for Moksha DE. Accepts "y", "Y", "n" and "N" as answers
+# function that asks whether to launch 'conky and 'picom' at PC startup. Intended for Moksha DE. Accepts "y", "Y", "n" and "N" as answers
 
 enable_autostart(){
 
@@ -174,7 +181,7 @@ enable_autostart(){
 	fi
 }
 
-#main function to execute the other functions in order. 
+# main function to execute the other functions in order. 
 
 main(){
 
@@ -188,7 +195,7 @@ enable_autostart
 
 main
 
-#code section that suggests restarting the PC at the end of the script. If you choose to not restart, you will need to start conky and picom manually.
+# code section that suggests restarting the PC at the end of the script. If you choose to not restart, you will need to start conky and picom manually.
 
 echo "Operations completed successfully"
 echo
@@ -206,7 +213,6 @@ else
 	echo "Invalid input. Please respond with 'y' or 'n'."
  	echo
 fi
-
 
 
 
