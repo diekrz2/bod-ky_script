@@ -14,6 +14,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+# variable that tracks the user's choice in the 'install_picom' function.
+
+pic_choice="yes"
 
 # function that checks if bash is being used
 
@@ -50,7 +53,8 @@ install_conky(){
 			echo "Error during 'conky' installation"
 			exit 1
 		fi
-	else
+	
+ 	else
 		echo "'conky' is already installed"
   		echo
 	fi
@@ -87,6 +91,7 @@ install_picom(){
 
 			echo "Operation cancelled"
    			echo
+   			pic_choice="no"
 
   		else
 			echo "Invalid input. Please respond with 'y' or 'n'."
@@ -160,14 +165,17 @@ enable_autostart(){
   		echo
 	   fi
 
-	   if ! grep -qx "picom" "$startup_file"; then
-		echo "picom" >> "$startup_file"
-		echo "'picom' has been configured to start automatically"
-  		echo
+	   if [[ "$pic_choice" == "yes" ]]; then
+			if ! grep -qx "picom" "$startup_file"; then
+				echo "picom" >> "$startup_file"
+				echo "'picom' has been configured to start automatically"
+				echo
 
-	   else
-		echo "'picom' is already configured to start automatically"
-  		echo
+				else
+				echo "'picom' is already configured to start automatically"
+				echo
+			fi
+  
 	   fi
   
 
@@ -213,7 +221,4 @@ else
 	echo "Invalid input. Please respond with 'y' or 'n'."
  	echo
 fi
-
-
-
 
