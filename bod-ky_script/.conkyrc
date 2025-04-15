@@ -48,7 +48,7 @@ ${font Product Sans:weight=Bold:size=40}${color0}\
 ${alignr}${time %H:%M}\
 ${voffset -30}
 ${font Product Sans:weight=Bold:size=20}${color0}\
-${time %d %B, %Y}\
+${alignr}${time %d %B, %Y}\
 ${voffset -10}
 ${font Product Sans:weight=Bold:size=10}${color0}\
 ${alignr}CPU: ${cpu cpu0}% | Storage: ${fs_free /} free\
