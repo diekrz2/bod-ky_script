@@ -70,7 +70,7 @@ install_picom(){
 	
 	if ! command -v picom &>/dev/null; then
 		
-		echo "'picom' is not installed. If you are using Bodhi Linux it's recommended to install it. Proceed? (Y/n)"
+		echo "'picom' is not installed. The compositor helps to display conky transparency correctly. Proceed? (Y/n)"
   		echo
 		read -r pic_install
   		echo
