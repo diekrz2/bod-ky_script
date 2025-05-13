@@ -207,7 +207,7 @@ main
 
 echo "Operations completed successfully"
 echo
-sleep 3
+sleep 2
 echo "Do you want to restart the PC now? (Y/n)"
 echo
 read -r answ
