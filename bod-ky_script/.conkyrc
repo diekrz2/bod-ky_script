@@ -9,10 +9,10 @@ draw_shades=false,
 draw_outline=false,
 draw_borders=false,
 
-gap_x=1050,
+gap_x=15,
 gap_y=10,
 
-alignment="top_left",
+alignment="top_right",
 
 minimum_height=200,
 minimum_width=0,
