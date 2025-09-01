@@ -214,7 +214,7 @@ read -r answ
 echo
 
 if [[ "$answ" =~ ^[yY]$ ]]; then
-	reboot
+	sudo reboot
 elif [[ "$answ" =~ ^[nN]$ ]]; then
 	echo "Operation cancelled"
 else
