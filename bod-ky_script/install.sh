@@ -73,7 +73,6 @@ install_picom(){
 		echo "'picom' is not installed. The compositor helps to display conky transparency correctly. Proceed? (Y/n)"
   		echo
 		read -r pic_install
-  		echo
 		if [[ "$pic_install" =~ ^[yY]$ ]]; then				
 
 		sudo apt install picom -y
