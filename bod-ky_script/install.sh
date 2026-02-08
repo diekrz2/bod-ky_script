@@ -70,9 +70,9 @@ install_picom(){
 	
 	if ! command -v picom &>/dev/null; then
 		
-		echo "'picom' is not installed. The compositor helps to display conky transparency correctly. Proceed? (Y/n)"
-  		echo
+		echo "'picom' is not installed. The compositor helps to display conky transparency correctly. Proceed? (Y/n) "
 		read -r pic_install
+		echo
 		if [[ "$pic_install" =~ ^[yY]$ ]]; then				
 
 		sudo apt install picom -y
@@ -112,8 +112,7 @@ replace_conkyrc(){
 	local source_file=".conkyrc"
 	local target_file="$HOME/.conkyrc"
 
-	echo "Do you want to use the '.conkyrc' configuration file included with this script? (Y/n)"
-	echo
+	echo "Do you want to use the '.conkyrc' configuration file included with this script? (Y/n) "
 	read -r replace
  	echo
 
@@ -145,8 +144,7 @@ enable_autostart(){
 
 	local startup_file="$HOME/.e/e/applications/startup/startupcommands"
 
-	echo "Do you want to enable 'conky' and 'picom' (if you decided to install it) on startup? (Y/n)"
- 	echo
+	echo "Do you want to enable 'conky' and 'picom' (if you decided to install it) on startup? (Y/n) "
 	read -r autostart
  	echo
 
@@ -207,8 +205,7 @@ main
 echo "Operations completed successfully"
 echo
 sleep 2
-echo "Do you want to restart the PC now? (Y/n)"
-echo
+echo "Do you want to restart the PC now? (Y/n) "
 read -r answ
 echo
 
