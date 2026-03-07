@@ -15,4 +15,3 @@ conky: https://github.com/brndnmtthws/conky
 
 picom: https://github.com/yshui/picom
 
-Bodhi Linux: https://www.bodhilinux.com
