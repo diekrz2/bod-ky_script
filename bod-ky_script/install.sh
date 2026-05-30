@@ -70,7 +70,8 @@ install_picom(){
 	
 	if ! command -v picom &>/dev/null; then
 		
-		echo "'picom' is not installed. The compositor helps to display conky transparency correctly. Proceed? (Y/n) "
+		echo "'picom' is not installed. 'picom' is a compositor that helps "
+		echo "to display conky transparency correctly. Proceed? (Y/n) "
 		read -r pic_install
 		echo
 		if [[ "$pic_install" =~ ^[yY]$ ]]; then				
