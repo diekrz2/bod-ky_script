@@ -2,7 +2,7 @@
 
 
 # Script that installs and sets up conky for Bodhi Linux.
-# Copyright (C) 2025 diekrz2 diekrz2@protonmail.com 
+# Copyright (C) 2025-2026 diekrz2 diekrz2@protonmail.com 
 
 # "bod-ky_script" is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,10 +22,17 @@ pic_choice="yes"
 
 check_bash(){
 
-if [ -z "$BASH_VERSION" ]; then
-   echo "This script requires bash to run. Try again using bash."
-   exit 1
-fi
+	if [ -z "$BASH_VERSION" ]; then
+		echo "This script requires bash to run. Try again using bash."
+		exit 1
+	fi
+}
+
+# function that returns 0 on Debian (Debian 13), 1 otherwise (Bodhi Linux 7)
+
+is_debian(){
+
+	[ "$(. /etc/os-release 2>/dev/null; echo "$ID")" = "debian" ]
 }
 
 # function that checks if 'conky' is installed, if not installs it. Accepts "y", "Y", "n" and "N" as answers
@@ -33,30 +40,30 @@ fi
 install_conky(){
 
 	echo "Checking if 'conky' is already installed..."
- 	echo
+	echo
 	sleep 2
-	
+
 	if ! command -v conky &>/dev/null; then
-		
+
 		echo "'conky' is not installed. Installing..."
-  		echo
+		echo
 		sleep 2
 
 		sudo apt update
 		sudo apt install conky-all -y
-  		echo
+		echo
 
 		if [ $? -eq 0 ]; then
 			echo "'conky' has been installed."
-   			echo
+			echo
 		else
 			echo "Error during 'conky' installation"
 			exit 1
 		fi
-	
- 	else
+
+	else
 		echo "'conky' is already installed"
-  		echo
+		echo
 	fi
 }
 
@@ -65,23 +72,23 @@ install_conky(){
 install_picom(){
 
 	echo "Checking if 'picom' is already installed..."
- 	echo
+	echo
 	sleep 2
-	
+
 	if ! command -v picom &>/dev/null; then
-		
+
 		echo "'picom' is not installed. 'picom' is a compositor that helps "
 		echo "to display conky transparency correctly. Proceed? (Y/n) "
 		read -r pic_install
 		echo
-		if [[ "$pic_install" =~ ^[yY]$ ]]; then				
+		if [[ "$pic_install" =~ ^[yY]$ ]]; then
 
-		sudo apt install picom -y
-  		echo
+			sudo apt install picom -y
+			echo
 
 			if [ $? -eq 0 ]; then
 				echo "'picom' has been installed."
-    				echo
+				echo
 			else
 				echo "Error during 'picom' installation"
 				exit 1
@@ -90,20 +97,38 @@ install_picom(){
 		elif [[ "$pic_install" =~ ^[nN]$ ]]; then
 
 			echo "Operation cancelled"
-   			echo
-   			pic_choice="no"
+			echo
+			pic_choice="no"
 
-  		else
+		else
 			echo "Invalid input. Please respond with 'y' or 'n'."
- 			echo
-		
-  		fi
+			echo
 
-  
+		fi
+
+
 	else
 		echo "'picom' is already installed"
-  		echo
+		echo
 	fi
+}
+
+# function that creates a minimal picom.conf on Debian 13: recent picom versions
+# require an explicit backend, otherwise they exit with code 1. Does nothing on Bodhi Linux 7
+
+configure_picom(){
+
+	local conf="$HOME/.config/picom/picom.conf"
+
+	is_debian || return 0
+	command -v picom &>/dev/null || return 0
+	[[ "$pic_choice" == "yes" ]] || return 0
+	[ -f "$conf" ] && return 0
+
+	mkdir -p "$(dirname "$conf")"
+	echo 'backend = "xrender";' > "$conf"
+	echo "'picom' backend configured in $conf"
+	echo
 }
 
 # function that asks whether to replace the default .conkyrc file with the one included with the script. Accepts "y", "Y", "n" and "N" as answers
@@ -115,87 +140,114 @@ replace_conkyrc(){
 
 	echo "Do you want to use the '.conkyrc' configuration file included with this script? (Y/n) "
 	read -r replace
- 	echo
+	echo
 
 	if [[ "$replace" =~ ^[yY]$ ]]; then
 		if [ -f "$source_file" ]; then
 			cp "$source_file" "$target_file"
 			echo "The file .conkyrc has been replaced"
-   			echo
+			echo
 			sleep 2
-		else	
-			echo "Error: conky configuration file not found"		
+		else
+			echo "Error: conky configuration file not found"
 			exit 1
 		fi
 	elif [[ "$replace" =~ ^[nN]$ ]]; then
 		echo "Operation cancelled"
-  		echo
+		echo
 	else
 		echo "Invalid input. Please respond with 'y' or 'n'."
-  		echo
+		echo
 
 	fi
 
 }
 
+# function that sets $startup_file and the entries to write:
+# BL7 uses command names in 'startupcommands', Debian 13 + Moksha uses .desktop names in '.order'
+
+detect_startup_layout(){
+
+	if is_debian; then
+		startup_file="${XDG_CONFIG_HOME:-$HOME/.config}/e/applications/startup/.order"
+		conky_entry="conky.desktop"
+		picom_entry="picom.desktop"
+	else
+		startup_file="$HOME/.e/e/applications/startup/startupcommands"
+		conky_entry="conky"
+		picom_entry="picom"
+	fi
+}
+
+# function that appends an entry to $startup_file. Returns 1 if the entry is already present
+
+add_startup_entry(){
+
+	local entry="$1"
+
+	grep -qxF "$entry" "$startup_file" && return 1
+
+	# makes sure the last line ends with a newline before appending
+	[ -s "$startup_file" ] && [ -n "$(tail -c1 "$startup_file")" ] && echo >> "$startup_file"
+	echo "$entry" >> "$startup_file"
+}
 
 # function that asks whether to launch 'conky and 'picom' at PC startup. Intended for Moksha DE. Accepts "y", "Y", "n" and "N" as answers
 
 enable_autostart(){
 
-	local startup_file="$HOME/.e/e/applications/startup/startupcommands"
+	detect_startup_layout
 
 	echo "Do you want to enable 'conky' and 'picom' (if you decided to install it) on startup? (Y/n) "
 	read -r autostart
- 	echo
+	echo
 
 	if [[ "$autostart" =~ ^[yY]$ ]]; then
 		mkdir -p "$(dirname "$startup_file")"
 		touch "$startup_file"
 
-	   if ! grep -qx "conky" "$startup_file"; then
-		echo "conky" >> "$startup_file"
-		echo "'conky' has been configured to start automatically"
-  		echo
+		if add_startup_entry "$conky_entry"; then
+			echo "'conky' has been configured to start automatically"
+			echo
 
-	   else
-		echo "'conky' is already configured to start automatically"
-  		echo
-	   fi
+		else
+			echo "'conky' is already configured to start automatically"
+			echo
+		fi
 
-	   if [[ "$pic_choice" == "yes" ]]; then
-			if ! grep -qx "picom" "$startup_file"; then
-				echo "picom" >> "$startup_file"
+		if [[ "$pic_choice" == "yes" ]]; then
+			if add_startup_entry "$picom_entry"; then
 				echo "'picom' has been configured to start automatically"
 				echo
 
-				else
+			else
 				echo "'picom' is already configured to start automatically"
 				echo
 			fi
-  
-	   fi
-  
+
+		fi
+
 
 	elif [[ "$autostart" =~ ^[nN]$ ]]; then
 		echo "Operation cancelled"
-  		echo
+		echo
 	else
 		echo "Invalid input. Please respond with 'y' or 'n'."
-  		echo
-		
+		echo
+
 	fi
 }
 
-# main function to execute the other functions in order. 
+# main function to execute the other functions in order.
 
 main(){
 
-check_bash
-install_conky
-install_picom
-replace_conkyrc
-enable_autostart
+	check_bash
+	install_conky
+	install_picom
+	configure_picom
+	replace_conkyrc
+	enable_autostart
 
 }
 
@@ -216,6 +268,5 @@ elif [[ "$answ" =~ ^[nN]$ ]]; then
 	echo "Operation cancelled"
 else
 	echo "Invalid input. Please respond with 'y' or 'n'."
- 	echo
+	echo
 fi
-
