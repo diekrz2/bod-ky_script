@@ -50,10 +50,8 @@ install_conky(){
 		sleep 2
 
 		sudo apt update
-		sudo apt install conky-all -y
-		echo
-
-		if [ $? -eq 0 ]; then
+		
+        if sudo apt install conky-all -y; then
 			echo "'conky' has been installed."
 			echo
 		else
@@ -78,15 +76,12 @@ install_picom(){
 	if ! command -v picom &>/dev/null; then
 
 		echo "'picom' is not installed. 'picom' is a compositor that helps "
-		echo "to display conky transparency correctly. Proceed? (Y/n) "
+		echo "to display transparency correctly. Proceed with the installation? (Y/n) "
 		read -r pic_install
 		echo
 		if [[ "$pic_install" =~ ^[yY]$ ]]; then
 
-			sudo apt install picom -y
-			echo
-
-			if [ $? -eq 0 ]; then
+            if sudo apt install picom -y; then
 				echo "'picom' has been installed."
 				echo
 			else
